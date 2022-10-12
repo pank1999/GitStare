@@ -1,0 +1,104 @@
+
+
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.form-container{
+    display: flex;
+   
+    align-items: center;
+    justify-content: center;
+}
+
+
+input{
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0px 0px 3px 3px gainsboro;
+    padding-left: 20px;
+}
+
+button{
+    padding: 10px 20px;
+    height: 40px;
+    background-color: green;
+    border: none;
+    border-radius: 5px;
+    margin-left: 20px;
+    color: white;
+}
+.user-details , .events-container{
+    display: flex;
+   align-items: center;
+   justify-content: space-between;
+   flex-direction: column;
+   margin-top: 50px;
+}
+
+
+.user-details img{
+    height: 100px;
+    width: 100px;
+    border-radius: 100%;
+
+}
+
+.stats{
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+}
+.stats p{
+    padding: 10px;
+    border: 1px solid grey;
+    margin-left: 20px;
+}
+
+.event{
+    padding: 20px;
+    background-color: rgb(103, 141, 103);
+    border: none;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    flex-direction: column;
+    margin-top: 20px;    
+    width: 500px;
+}
+.event a{
+    font-size: 18px;
+    color: rgb(243, 243, 243);
+    background-color: rgb(109, 62, 62);
+    padding: 10px;
+}
+
+.event-2{
+    padding: 20px;
+    background-color: rgb(97, 143, 173);
+    border: none;
+    border-radius: 5px;
+    width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    flex-direction: column;
+    margin-top: 20px;    
+}
+
+.footer{
+    height: 100px;
+    background-color: rgb(44, 71, 95);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-top: 100px;
+}
