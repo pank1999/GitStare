@@ -1,50 +1,126 @@
-<div class="container" >
-    <h1 style="text-decoration: underline;" >Git Share !</h1>
-    <div>
-        <h1> lets connect to developers </h1>
-    </div>
-    <div>
-        <div>
-            <form #form="ngForm" class="form-container"  (ngSubmit)="submitForm(form)"  > 
-                <input type="text" name="username" ngModel placeholder="username" >
-                <button  type="submit">Search</button>
-            </form>
-        </div>
-        <div class="user-details" *ngFor="let user of userData$|async " >
-              <img src={{user.avatar_url}} alt="img">
-              <p>{{user.name}} </p>
-              <p>Most Recent Activity of {{user.login}}</p>
-              <div class="stats" >
-                  <p>  repository  <span> {{user.public_repos}} </span> </p>
-                  <p>Gits  <span> {{user.public_gists}} </span> </p>
-                  <p>Following  <span> {{user.following}} </span> </p>
-                  <p>Followers  <span> {{user.followers}} </span> </p>
-              </div>
-              <div class="events-container" >
-                   <div *ngFor="let user of userEventData$|async" >
-                       <div class="event" *ngIf="user.type==='PullRequestEvent'; else elseBlock"  >
-                           <h2>{{user.type}}</h2>
-                           <p>{{user.created_at | date }} </p>
-                           <h3> {{user.repo.url | subtring }} </h3>
-                           <p>Related Commits</p>
-                           <div>
-                            <a href={{user.payload.pull_request.url}}  target="_blank" > Watch Pull Request </a>
-                            
-                           </div>
-                       </div>
+<div class="container">
+  <div class="header">
+    <h1>GitShare</h1>
+    <p>Connect with developers and explore their activity</p>
+  </div>
 
-                       <ng-template #elseBlock >
-                           <div class="event-2" >
-                               <h2>{{user.type}}</h2>
-                               <p>{{user.created_at | date }} </p>
-                               <h3> {{user.repo.url | subtring }} </h3>
-                           </div>
-                       </ng-template>
-                   </div>
-              </div>
+  <form #form="ngForm" class="form-container" (ngSubmit)="submitForm(form)">
+    <input
+      type="text"
+      name="username"
+      ngModel
+      placeholder="Enter GitHub username"
+      autocomplete="off"
+    />
+    <button type="submit">Search</button>
+  </form>
+
+  <div class="user-details" *ngFor="let user of userData$ | async">
+    <div style="text-align: center">
+      <img [src]="user.avatar_url" [alt]="user.name" />
+      <h2>{{ user.name }}</h2>
+      <!-- <p style="color: #666">@{{ user.login }}</p> -->
+    </div>
+
+    <div class="stats">
+      <p>
+        <strong>{{ user.public_repos }}</strong>
+        <br />Repositories
+      </p>
+      <p>
+        <strong>{{ user.public_gists }}</strong>
+        <br />Gists
+      </p>
+      <p>
+        <strong>{{ user.following }}</strong>
+        <br />Following
+      </p>
+      <p>
+        <strong>{{ user.followers }}</strong>
+        <br />Followers
+      </p>
+    </div>
+
+    <div class="filter-container" *ngIf="eventsSubject.value.length">
+      <h3 style="text-align: center; color: #666">Recent Activity</h3>
+      <div class="filter-buttons">
+        <button
+          *ngFor="let type of eventTypes"
+          [class.active]="(selectedEventType | async) === type"
+          (click)="onFilterChange(type)"
+          class="filter-btn"
+        >
+          {{ type === "all" ? "All Events" : type.replace("Event", "") }}
+        </button>
+      </div>
+    </div>
+
+    <div class="events-container" [class.loading]="isLoading">
+      <div *ngIf="(userEventData$ | async)?.length === 0" class="no-events">
+        <p>No events found for the selected filter.</p>
+      </div>
+
+      <div class="event-wrapper" *ngFor="let event of userEventData$ | async">
+        <div [ngClass]="'event event-' + event.type">
+          <div class="event-header">
+            <span class="event-type">{{ event.type }}</span>
+            <span class="event-date">{{
+              event.created_at | date : "medium"
+            }}</span>
+          </div>
+
+          <div class="event-repo">
+            <strong>Repository:</strong> {{ event.repo.name }}
+          </div>
+
+          <div class="event-message" *ngIf="event.payload?.commits?.length">
+            <strong>Message:</strong> {{ event.payload.commits[0].message }}
+          </div>
+
+          <ng-container [ngSwitch]="event.type">
+            <!-- Push Event -->
+            <div *ngSwitchCase="'PushEvent'">
+              <p>Pushed {{ event.payload.commits?.length || 0 }} commits</p>
+              <a
+                *ngIf="event.payload.commits?.length"
+                [href]="event.payload.commits[0].url"
+                target="_blank"
+                class="event-link"
+              >
+                View Commits
+              </a>
+            </div>
+
+            <!-- Pull Request Event -->
+            <div *ngSwitchCase="'PullRequestEvent'">
+              <p>{{ event.payload.action }} pull request</p>
+              <a
+                [href]="event.payload.pull_request.html_url"
+                target="_blank"
+                class="event-link"
+              >
+                View Pull Request
+              </a>
+            </div>
+
+            <!-- Create Event -->
+            <div *ngSwitchCase="'CreateEvent'">
+              <p>Created {{ event.payload.ref_type }}</p>
+            </div>
+
+            <!-- Default Case -->
+            <div *ngSwitchDefault>
+              <a [href]="event.repo.url" target="_blank" class="event-link">
+                View Details
+              </a>
+            </div>
+          </ng-container>
         </div>
+      </div>
     </div>
-    <div class="footer" >
-        <p>Made with love by pankaj pandey </p>
-    </div>
+  </div>
+
+  <div class="footer">
+    <p>Made with ❤️ by Pankaj Pandey</p>
+  </div>
 </div>
