@@ -1,0 +1,50 @@
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>Git Stare</h3>
+      <p>Explore GitHub profiles and activities with ease.</p>
+    </div>
+
+    <div class="footer-section">
+      <h3>Connect</h3>
+      <div class="social-links">
+        <a
+          *ngFor="let social of socialLinks"
+          [href]="social.url"
+          target="_blank"
+          class="social-link"
+          [attr.aria-label]="social.name"
+        >
+          <i [class]="social.icon"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <ul class="quick-links">
+        <li>
+          <a href="https://github.com/pank1999/GitStare" target="_blank"
+            >Source Code</a
+          >
+        </li>
+        <li>
+          <a href="https://github.com/pank1999/GitStare/issues" target="_blank"
+            >Report Issue</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://github.com/pank1999/GitStare/blob/main/README.md"
+            target="_blank"
+            >Documentation</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; {{ currentYear }} Git Stare. Made with ❤️ by Pankaj Pandey</p>
+  </div>
+</footer>
